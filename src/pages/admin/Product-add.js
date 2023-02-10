@@ -3,7 +3,6 @@ import { useEffect, router } from "@/utilities";
 import { v4 as uuidv4 } from "uuid";
 
 const AdminProductAddPage = () => {
-    const products = JSON.parse(localStorage.getItem("products")) || [];
     useEffect(() => {
         const form = document.getElementById("form-add");
         const productName = document.getElementById("product-name");
@@ -12,20 +11,19 @@ const AdminProductAddPage = () => {
         form.addEventListener("submit", function (e) {
             e.preventDefault();
             const newProduct = {
-                id: uuidv4(),
                 name: productName.value,
                 price: productPrice.value,
             };
 
-            // thêm vào mảng products;
-            products.push(newProduct);
-
-            // lưu lại storage
-
-            localStorage.setItem("products", JSON.stringify(products));
-
-            // redirect sang admin/products
-            router.navigate("/admin/products");
+            fetch("http://localhost:3000/products", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newProduct), // '{"a": "10"}'
+            }).then(() => {
+                router.navigate("/admin/products");
+            });
         });
     });
     return `<div class="container">

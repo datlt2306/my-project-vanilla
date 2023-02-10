@@ -1,12 +1,12 @@
-import { products } from "@/data";
 import { useEffect, useState } from "@/utilities";
 
 const AdminProductsPage = () => {
-    const [data, setData] = useState([]);
+    const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        const products = JSON.parse(localStorage.getItem("products")) || [];
-        setData(products);
+        fetch("http://localhost:3000/products")
+            .then((response) => response.json())
+            .then((data) => setProducts(data));
     }, []);
 
     useEffect(() => {
@@ -29,7 +29,7 @@ const AdminProductsPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        ${data
+                        ${products
                             .map(
                                 (product, index) => `
                             <tr>
