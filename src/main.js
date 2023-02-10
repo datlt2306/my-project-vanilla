@@ -19,6 +19,6 @@ router.on("/product/:id", ({ data }) => render(() => ProductDetailPage(data), ap
 
 router.on("/admin/products", () => render(AdminProductsPage, app));
 router.on("/admin/products/add", () => render(AdminProductAddPage, app));
-router.on("/admin/products/:id/edit", () => render(({ data }) => AdminProductEditPage(data), app));
+router.on("/admin/products/:id/edit", ({ data }) => render(() => AdminProductEditPage(data), app));
 router.notFound(() => render(NotFoundPage, app));
 router.resolve();

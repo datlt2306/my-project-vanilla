@@ -14,8 +14,14 @@ const AdminProductsPage = () => {
         for (let btn of btns) {
             btn.addEventListener("click", function () {
                 const id = this.dataset.id;
-                const newProducts = data.filter((product) => product.id !== +id);
-                setData(newProducts);
+
+                fetch(`http://localhost:3000/products/${id}`, {
+                    method: "DELETE",
+                }).then(() => {
+                    // reRender
+                    const newProducts = products.filter((product) => product.id !== +id);
+                    setProducts(newProducts);
+                });
             });
         }
     });
