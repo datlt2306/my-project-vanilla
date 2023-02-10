@@ -1,12 +1,14 @@
+import { deleteProduct, getProducts } from "@/api/product";
 import { useEffect, useState } from "@/utilities";
+import axios from "axios";
 
 const AdminProductsPage = () => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:3000/products")
-            .then((response) => response.json())
-            .then((data) => setProducts(data));
+        getProducts()
+            .then(({ data }) => setProducts(data))
+            .catch((error) => console.log(error));
     }, []);
 
     useEffect(() => {
@@ -14,14 +16,15 @@ const AdminProductsPage = () => {
         for (let btn of btns) {
             btn.addEventListener("click", function () {
                 const id = this.dataset.id;
-
-                fetch(`http://localhost:3000/products/${id}`, {
-                    method: "DELETE",
-                }).then(() => {
-                    // reRender
-                    const newProducts = products.filter((product) => product.id !== +id);
-                    setProducts(newProducts);
-                });
+                const confirm = window.confirm("bạn có chắc chắn muốn xóa hay không?");
+                if (confirm) {
+                    deleteProduct(id)
+                        .then(() => {
+                            const newProducts = products.filter((product) => product.id !== +id);
+                            setProducts(newProducts);
+                        })
+                        .catch((error) => console.log(error));
+                }
             });
         }
     });

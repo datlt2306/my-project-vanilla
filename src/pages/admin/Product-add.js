@@ -1,6 +1,6 @@
+import { addProduct } from "@/api/product";
 import { useEffect, router } from "@/utilities";
-// import { products } from "@/data";
-import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 
 const AdminProductAddPage = () => {
     useEffect(() => {
@@ -10,20 +10,12 @@ const AdminProductAddPage = () => {
 
         form.addEventListener("submit", function (e) {
             e.preventDefault();
-            const newProduct = {
+            addProduct({
                 name: productName.value,
                 price: productPrice.value,
-            };
-
-            fetch("http://localhost:3000/products", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newProduct), // '{"a": "10"}'
-            }).then(() => {
-                router.navigate("/admin/products");
-            });
+            })
+                .then(() => router.navigate("/admin/products"))
+                .catch((error) => console.log(error));
         });
     });
     return `<div class="container">

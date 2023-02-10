@@ -1,4 +1,6 @@
+import { updateProduct } from "@/api/product";
 import { useEffect, router, useState } from "@/utilities";
+import axios from "axios";
 
 const AdminProductEditPage = ({ id }) => {
     console.log(id);
@@ -8,11 +10,7 @@ const AdminProductEditPage = ({ id }) => {
     const [product, setProduct] = useState({});
 
     useEffect(() => {
-        fetch(`http://localhost:3000/products/${id}`)
-            .then((response) => response.json())
-            .then((data) => {
-                setProduct(data);
-            });
+        axios.get(`http://localhost:3000/products/${id}`).then(({ data }) => setProduct(data));
     }, []);
 
     useEffect(() => {
@@ -23,19 +21,14 @@ const AdminProductEditPage = ({ id }) => {
         form.addEventListener("submit", function (e) {
             e.preventDefault();
             const formData = {
+                id,
                 name: productName.value,
                 price: productPrice.value,
             };
-            fetch(`http://localhost:3000/products/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
-            }).then(() => {
-                // redirect sang admin/products
-                router.navigate("/admin/products");
-            });
+
+            updateProduct(formData)
+                .then(() => router.navigate("/admin/products"))
+                .catch((error) => console.log(error));
         });
     });
     return `<div class="container">
