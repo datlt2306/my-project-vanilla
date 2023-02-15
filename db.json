@@ -9,6 +9,16 @@
       "name": "Sản phẩm 7 update",
       "price": "700",
       "id": 7
+    },
+    {
+      "name": "Sản phẩm mới",
+      "price": "200",
+      "gallery": [
+        "https://res.cloudinary.com/ecommercer2021/image/upload/v1676452723/ECMA/rekgox6kxu2nsearhtu5.png",
+        "https://res.cloudinary.com/ecommercer2021/image/upload/v1676452724/ECMA/ejnnazgcig3bnindirnm.png",
+        "https://res.cloudinary.com/ecommercer2021/image/upload/v1676452724/ECMA/q3xqefzpek9gigps7jua.png"
+      ],
+      "id": 8
     }
   ]
 }
