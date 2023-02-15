@@ -1,4 +1,4 @@
-import { updateProduct } from "@/api/product";
+import { getProduct, updateProduct } from "@/api/product";
 import { useEffect, router, useState } from "@/utilities";
 import axios from "axios";
 
@@ -10,7 +10,13 @@ const AdminProductEditPage = ({ id }) => {
     const [product, setProduct] = useState({});
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/products/${id}`).then(({ data }) => setProduct(data));
+        (async () => {
+            try {
+                setProduct(await getProduct(id));
+            } catch (error) {
+                console.log(error);
+            }
+        })();
     }, []);
 
     useEffect(() => {
@@ -18,17 +24,18 @@ const AdminProductEditPage = ({ id }) => {
         const productName = document.getElementById("product-name");
         const productPrice = document.getElementById("product-price");
 
-        form.addEventListener("submit", function (e) {
+        form.addEventListener("submit", async function (e) {
             e.preventDefault();
-            const formData = {
-                id,
-                name: productName.value,
-                price: productPrice.value,
-            };
-
-            updateProduct(formData)
-                .then(() => router.navigate("/admin/products"))
-                .catch((error) => console.log(error));
+            try {
+                await updateProduct({
+                    id,
+                    name: productName.value,
+                    price: productPrice.value,
+                });
+                router.navigate("/admin/products");
+            } catch (error) {
+                console.log(error);
+            }
         });
     });
     return `<div class="container">

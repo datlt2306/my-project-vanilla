@@ -6,24 +6,29 @@ const AdminProductsPage = () => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        getProducts()
-            .then(({ data }) => setProducts(data))
-            .catch((error) => console.log(error));
+        (async () => {
+            try {
+                setProducts(await getProducts());
+            } catch (error) {
+                console.log(error);
+            }
+        })();
     }, []);
 
     useEffect(() => {
         const btns = document.querySelectorAll(".btn-remove");
         for (let btn of btns) {
-            btn.addEventListener("click", function () {
+            btn.addEventListener("click", async function () {
                 const id = this.dataset.id;
                 const confirm = window.confirm("bạn có chắc chắn muốn xóa hay không?");
                 if (confirm) {
-                    deleteProduct(id)
-                        .then(() => {
-                            const newProducts = products.filter((product) => product.id !== +id);
-                            setProducts(newProducts);
-                        })
-                        .catch((error) => console.log(error));
+                    try {
+                        await deleteProduct(id);
+                        const newProducts = products.filter((product) => product.id !== +id);
+                        setProducts(newProducts);
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
             });
         }
